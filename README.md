@@ -2,7 +2,7 @@
 
 testing-workflow-skills 用于 Codex 的测试工作流，与已有 jwy-testi-expert（WorkBuddy/VS Code 五步流水线）独立并存。两者分别维护、安装和更新。
 
-对外整包名称是 **testing-workflow**。仓库链接：[Izeril/testing-workflow-skills](https://github.com/Izeril/testing-workflow-skills)。本次通用化候选版本为 `1.1.0-rc.1`；验证后发布 `v1.1.0`。旧 `v1.0.0` 没有整包入口，不能使用下方整包安装参数安装它。
+对外整包名称是 **testing-workflow**。仓库链接：[Izeril/testing-workflow-skills](https://github.com/Izeril/testing-workflow-skills)。通用整包版本为 `v1.1.0`，支持下方标准安装器命令。旧 `v1.0.0` 没有整包入口，不能使用下方整包安装参数安装它。
 
 ## 把仓库链接发给助手安装
 
@@ -53,7 +53,7 @@ python "<包根目录>/contracts/validate_contracts.py"
 
 `PyYAML` 读取配置，`markdownify` 转换 HTML/MHTML。`tree-sitter` 和 `tree-sitter-java` 用于 Java 语法解析；代码保留无解析器时的明确降级，`tree-sitter-languages` 是可选回退。仅 OLE2 二进制 Word `.doc` 转换需要外部 LibreOffice/soffice，未安装时说明缺少该条件依赖。
 
-3. 核对宿主发现 `testing-workflow`，并确认内部入口来自 `<包根目录>/testcase-generator`。技能通常在下一轮可用；未刷新时重启后再查。若现有项目级同名核心技能仍存在，明确使用 testing-workflow 的包内路径，不自行删除旧来源。
+3. 核对宿主发现 `testing-workflow`，并确认内部入口来自 `<包根目录>/testcase-generator`。如果宿主递归扫描出包内四个子技能，在该宿主标准 `skills.config` 中仅将这四个安装路径的 `SKILL.md` 设置为 `enabled = false`，保留外层 `testing-workflow/SKILL.md` 启用；核对路径属于本包后再写入，不停用其他项目或用户级同名入口。该设置只停用子技能的宿主入口声明，不影响外层按文件读取核心指令或调用包内脚本。技能通常在下一轮可用；未刷新时重启后再查。若现有项目级同名核心技能仍存在，明确使用 testing-workflow 的包内路径，不自行删除旧来源。
 4. 提供你自己的具体需求目录，例如：
 
 > 使用 testing-workflow 分析需求目录「<本机需求目录>」，先完成需求分析和评审。

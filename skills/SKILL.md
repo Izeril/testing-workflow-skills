@@ -2,7 +2,7 @@
 name: testing-workflow
 description: Codex 中文企业测试工作流整包入口，统一执行需求分析、需求评审、测试点与 XMind 用例生成、用例细化和知识库归档；使用包内组件，支持任意需求目录，与 jwy 五步流水线独立维护。
 metadata:
-  version: 1.1.0-rc.1
+  version: 1.1.0
 ---
 
 # testing-workflow
