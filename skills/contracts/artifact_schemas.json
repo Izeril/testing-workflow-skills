@@ -1,0 +1,230 @@
+{
+  "schema_version": "1.0.0",
+  "schemas": {
+    "requirement_facts": {
+      "type": "object",
+      "required": ["schema_version", "workflow_version", "generated_at", "items"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "workflow_version": {"type": "string", "min_length": 1},
+        "generated_at": {"type": "string", "min_length": 1},
+        "items": {
+          "type": "array",
+          "unique_by": "fact_id",
+          "items": {
+            "type": "object",
+            "required": ["fact_id", "dimension", "type", "title", "content", "source", "confidence"],
+            "properties": {
+              "fact_id": {"type": "string", "min_length": 1},
+              "dimension": {"type": "string", "min_length": 1},
+              "type": {"type": "string", "enum": ["明确需求", "代码证据"]},
+              "title": {"type": "string", "min_length": 1},
+              "source": {"type": "string", "min_length": 1},
+              "confidence": {"type": "string", "enum": ["confirmed", "high", "medium", "low", "potential", "unknown"]},
+              "stable_key": {"type": "string", "min_length": 1},
+              "comparable": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    "test_design_model": {
+      "type": "object",
+      "required": ["schema_version", "workflow_version", "generated_at", "mode", "risks", "state_transitions", "review_questions", "quality_issues", "consistency_summary", "fix_suggestion_summary"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "workflow_version": {"type": "string", "min_length": 1},
+        "generated_at": {"type": "string", "min_length": 1},
+        "mode": {
+          "type": "object",
+          "required": ["selected_mode", "mode_label", "mode_reason", "mode_score", "score_items", "trigger_features", "code_analysis_strategy", "selected_by", "confirmed_by_user"],
+          "properties": {
+            "selected_mode": {"type": "string", "enum": ["fast", "fast_plus", "standard", "deep"]},
+            "mode_label": {"type": "string", "min_length": 1},
+            "mode_reason": {"type": "array", "items": {"type": "string"}},
+            "mode_score": {"type": "number"},
+            "score_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["feature", "weight", "reason", "evidence", "source"],
+                "properties": {
+                  "feature": {"type": "string", "min_length": 1},
+                  "weight": {"type": "number"},
+                  "reason": {"type": "string", "min_length": 1},
+                  "source": {"type": "string", "min_length": 1}
+                }
+              }
+            },
+            "trigger_features": {"type": "array", "items": {"type": "string"}},
+            "code_analysis_strategy": {"type": "string", "min_length": 1},
+            "selected_by": {"type": "string", "min_length": 1},
+            "confirmed_by_user": {"type": "boolean"}
+          }
+        },
+        "risks": {
+          "type": "array",
+          "unique_by": "risk_id",
+          "items": {
+            "type": "object",
+            "required": ["risk_id", "title", "priority", "trigger_features", "source", "confidence"],
+            "properties": {
+              "risk_id": {"type": "string", "min_length": 1},
+              "title": {"type": "string", "min_length": 1},
+              "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+              "trigger_features": {"type": "array", "items": {"type": "string"}},
+              "source": {"type": "string", "min_length": 1},
+              "confidence": {"type": "string", "enum": ["confirmed", "high", "medium", "low", "potential", "unknown"]}
+            }
+          }
+        },
+        "state_transitions": {
+          "type": "array",
+          "unique_by": "state_id",
+          "items": {
+            "type": "object",
+            "required": ["state_id", "title", "from_state", "to_state", "priority", "source", "confidence"],
+            "properties": {
+              "state_id": {"type": "string", "min_length": 1},
+              "title": {"type": "string", "min_length": 1},
+              "from_state": {"type": "string"},
+              "to_state": {"type": "string"},
+              "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+              "source": {"type": "string", "min_length": 1},
+              "confidence": {"type": "string", "enum": ["confirmed", "high", "medium", "low", "potential", "unknown"]}
+            }
+          }
+        },
+        "review_questions": {
+          "type": "array",
+          "unique_by": "question_id",
+          "items": {
+            "type": "object",
+            "required": ["question_id", "title", "severity", "source", "evidence", "decision_status", "requires_testpoint", "confidence"],
+            "properties": {
+              "question_id": {"type": "string", "min_length": 1},
+              "title": {"type": "string", "min_length": 1},
+              "severity": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+              "source": {"type": "string", "min_length": 1},
+              "evidence": {"type": "string"},
+              "decision_status": {"type": "string", "enum": ["pending", "decided"]},
+              "requires_testpoint": {"type": "boolean"},
+              "confidence": {"type": "string", "enum": ["confirmed", "high", "medium", "low", "potential", "unknown"]}
+            }
+          }
+        },
+        "quality_issues": {"type": "array"},
+        "consistency_summary": {
+          "type": "object",
+          "required": ["status", "c1_count", "c2_count", "c3_count", "c4_count", "finding_count"],
+          "properties": {
+            "status": {"type": "string", "min_length": 1},
+            "c1_count": {"type": "integer"},
+            "c2_count": {"type": "integer"},
+            "c3_count": {"type": "integer"},
+            "c4_count": {"type": "integer"},
+            "finding_count": {"type": "integer"}
+          }
+        },
+        "fix_suggestion_summary": {
+          "type": "object",
+          "required": ["status", "suggestion_count", "p1_count", "p2_count", "requires_human_confirm_count", "selected_mode"],
+          "properties": {
+            "status": {"type": "string", "min_length": 1},
+            "suggestion_count": {"type": "integer"},
+            "p1_count": {"type": "integer"},
+            "p2_count": {"type": "integer"},
+            "requires_human_confirm_count": {"type": "integer"},
+            "selected_mode": {"type": "string", "enum": ["fast", "fast_plus", "standard", "deep"]}
+          }
+        }
+      }
+    },
+    "coverage_matrix": {
+      "type": "object",
+      "required": ["schema_version", "workflow_version", "generated_at", "requirement_facts", "risks", "state_transitions", "review_questions", "mappings", "statistics", "mode_selection"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "workflow_version": {"type": "string", "min_length": 1},
+        "generated_at": {"type": "string", "min_length": 1},
+        "requirement_facts": {"type": "array"},
+        "risks": {"type": "array"},
+        "state_transitions": {"type": "array"},
+        "review_questions": {"type": "array"},
+        "mappings": {
+          "type": "array",
+          "unique_by": "coverage_id",
+          "items": {
+            "type": "object",
+            "required": ["coverage_id", "coverage_type", "title", "priority", "covered_by", "status"],
+            "properties": {
+              "coverage_id": {"type": "string", "min_length": 1},
+              "coverage_type": {"type": "string", "enum": ["risk", "state_transition", "review_question", "business_impact", "requirement_code_comparison"]},
+              "title": {"type": "string", "min_length": 1},
+              "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+              "covered_by": {"type": "array", "items": {"type": "string"}},
+              "status": {"type": "string", "enum": ["covered", "uncovered", "decided", "pending_confirmation"]}
+            }
+          }
+        },
+        "statistics": {
+          "type": "object",
+          "required": ["requirement_fact_count", "risk_count", "p1_risk_count", "p1_risk_covered", "p1_risk_coverage_rate", "state_transition_count", "critical_state_transition_count", "critical_state_transition_covered", "critical_state_transition_coverage_rate", "review_question_count", "important_review_question_count", "important_review_question_handled", "important_review_question_coverage_rate", "testpoint_count"],
+          "properties": {
+            "requirement_fact_count": {"type": "integer"},
+            "risk_count": {"type": "integer"},
+            "p1_risk_count": {"type": "integer"},
+            "p1_risk_covered": {"type": "integer"},
+            "p1_risk_coverage_rate": {"type": "number"},
+            "state_transition_count": {"type": "integer"},
+            "critical_state_transition_count": {"type": "integer"},
+            "critical_state_transition_covered": {"type": "integer"},
+            "critical_state_transition_coverage_rate": {"type": "number"},
+            "review_question_count": {"type": "integer"},
+            "important_review_question_count": {"type": "integer"},
+            "important_review_question_handled": {"type": "integer"},
+            "important_review_question_coverage_rate": {"type": "number"},
+            "testpoint_count": {"type": "integer"}
+          }
+        },
+        "mode_selection": {"type": "object", "required": ["selected_mode", "mode_label", "mode_reason", "mode_score", "score_items", "trigger_features", "code_analysis_strategy", "selected_by", "confirmed_by_user"]},
+        "traceability_chain": {"type": "string", "enum": ["RQ → BI → RC → TP", "RQ → TP"]}
+      }
+    },
+    "quality_gate_report": {
+      "type": "object",
+      "required": ["schema_version", "workflow_version", "generated_at", "summary", "gates", "auto_repaired_count", "auto_repaired_by_gate"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "workflow_version": {"type": "string", "min_length": 1},
+        "generated_at": {"type": "string", "min_length": 1},
+        "summary": {
+          "type": "object",
+          "required": ["status", "blocking_count", "warning_count"],
+          "properties": {
+            "status": {"type": "string", "enum": ["passed", "blocked"]},
+            "blocking_count": {"type": "integer"},
+            "warning_count": {"type": "integer"}
+          }
+        },
+        "gates": {
+          "type": "array",
+          "unique_by": "gate_id",
+          "items": {
+            "type": "object",
+            "required": ["gate_id", "name", "status", "message", "blocking"],
+            "properties": {
+              "gate_id": {"type": "string", "min_length": 1},
+              "name": {"type": "string", "min_length": 1},
+              "status": {"type": "string", "enum": ["passed", "failed", "warning", "skipped"]},
+              "message": {"type": "string"},
+              "blocking": {"type": "boolean"}
+            }
+          }
+        },
+        "auto_repaired_count": {"type": "integer"},
+        "auto_repaired_by_gate": {"type": "object"}
+      }
+    }
+  }
+}

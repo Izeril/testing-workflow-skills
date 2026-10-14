@@ -1,0 +1,4 @@
+interface:
+  display_name: "需求实现审计器"
+  short_description: "从需求目录自动审计开发分支实现完整性并保留双侧证据"
+  default_prompt: "Use $requirement-code-auditor to audit whether the development branch fully implements the requirement directory."

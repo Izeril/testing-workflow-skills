@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "schemas": {
+    "requirement_code_audit": {
+      "type": "object",
+      "required": ["schema_version", "producer", "run_id", "workflow_version", "status", "mode", "inputs", "targets", "quality_summary", "warnings", "artifacts"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "producer": {"type": "string", "const": "requirement-code-auditor"},
+        "run_id": {"type": "string", "min_length": 16},
+        "workflow_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "status": {"type": "string", "enum": ["passed", "warning", "blocked", "failed"]},
+        "mode": {"type": "string", "enum": ["audit", "analyze"]},
+        "inputs": {"type": "object"},
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["target_id", "repo_path", "branch", "baseline", "target_sha", "baseline_sha", "status"],
+            "properties": {
+              "target_id": {"type": "string", "min_length": 1},
+              "repo_path": {"type": "string", "min_length": 1},
+              "branch": {"type": "string", "min_length": 1},
+              "baseline": {"type": "string", "min_length": 1},
+              "target_sha": {"type": "string", "min_length": 1},
+              "baseline_sha": {"type": "string", "min_length": 1},
+              "status": {"type": "string"}
+            }
+          }
+        },
+        "quality_summary": {"type": "object"},
+        "warnings": {"type": "array", "items": {"type": "string"}},
+        "artifacts": {"type": "object"}
+      }
+    },
+    "code_evidence": {
+      "type": "object",
+      "required": ["schema_version", "producer", "coverage_summary"],
+      "properties": {
+        "schema_version": {"type": "string", "const": "1.0.0"},
+        "producer": {"type": "string", "const": "requirement-code-auditor"},
+        "coverage_summary": {"type": "object"}
+      }
+    }
+  }
+}

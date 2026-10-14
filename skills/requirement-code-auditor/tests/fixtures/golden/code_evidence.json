@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "producer": "requirement-code-auditor",
+  "run_id": "golden-run-1234567890abcdef",
+  "coverage_summary": {"status": "complete"},
+  "apis": {
+    "schema_version": "1.1.0",
+    "coverage_status": "complete",
+    "comparison_policy": "identity",
+    "source": "apis",
+    "items": [{"stable_key": "POST /api/orders", "value": null, "source": "OrderController.java"}]
+  }
+}

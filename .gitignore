@@ -1,0 +1,26 @@
+# 本机配置、认证和缓存
+**/config.local.yaml
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.idea/
+.vscode/
+# 业务材料、运行状态与测试专用对照
+.ai-internal/
+.skill/
+skills-archive/
+knowledge-base/
+.runs/
+*.log
+skills/testcase-generator/tests/fixtures/real_project_quality_baseline.json
+skills/testcase-generator/tests/fixtures/core_artifact_golden.json
+skills/testcase-generator/tests/fixtures/extended_artifact_golden.json
+skills/doc-to-md/tests/fixtures/real_mhtml_golden.json
+**/*.local.json

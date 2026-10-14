@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "companyName": "base表company_id关联"
+  },
+  "apis": [
+    "查询企业重大违法违章接口"
+  ],
+  "tables": [
+    "t_tax_special_legal"
+  ],
+  "rules": [
+    "use_flag<>10 and is_history=0"
+  ],
+  "sorting": [
+    "未明确排序"
+  ]
+}

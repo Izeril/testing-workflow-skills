@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "producer": "requirement-code-auditor",
+  "run_id": "golden-run-1234567890abcdef",
+  "workflow_version": "1.0.0",
+  "status": "passed",
+  "mode": "audit",
+  "inputs": {"requirement_dir": "synthetic/requirement"},
+  "targets": [
+    {
+      "target_id": "synthetic-java",
+      "repo_path": "synthetic/repo",
+      "branch": "feature/golden",
+      "baseline": "master",
+      "target_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "baseline_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "status": "completed"
+    }
+  ],
+  "requirement_facts": {"path": ".ai-internal/requirement_facts.json", "fact_count": 1},
+  "code_analysis": {"path": ".ai-internal/code_analysis.json", "files_changed": 1},
+  "code_evidence": {"path": ".ai-internal/code_evidence.json", "coverage_status": "complete"},
+  "analysis_capabilities": [{"call_chain": {"provider": "static_text", "codegraph_status": "not_configured", "degraded": false, "limitations": []}}],
+  "requirement_code_comparison": {"path": ".ai-internal/requirement_code_comparison.json", "summary": {"一致": 1, "总计": 1}},
+  "quality_summary": {"status": "passed", "fact_count": 1},
+  "warnings": [],
+  "artifacts": {"requirement_code_audit.json": ".ai-internal/requirement_code_audit.json"}
+}

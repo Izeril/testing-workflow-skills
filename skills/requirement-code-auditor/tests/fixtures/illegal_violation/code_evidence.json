@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "companyName": "dwd__risk_tax_punish__mv.taxpayer",
+    "actualNameInfo": "空字符串"
+  },
+  "apis": [
+    "查询企业重大违法违章接口"
+  ],
+  "tables": [
+    "dwd__risk_tax_punish__mv"
+  ],
+  "rules": [
+    "taxpayer = #{companyName} OR tax_code = #{taxId}"
+  ],
+  "sorting": [
+    "ORDER BY year_month_ asc, create_time asc"
+  ]
+}

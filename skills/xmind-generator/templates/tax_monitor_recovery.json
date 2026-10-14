@@ -1,0 +1,198 @@
+{
+  "name": "tax_monitor_recovery",
+  "title": "税局服务监控恢复检测机制优化",
+  "keywords": ["税局服务监控", "恢复检测", "税号", "采集", "预警"],
+  "structure": {
+    "kym": {
+      "title": "KYM",
+      "children": [
+        {"title": "需求背景"},
+        {"title": "问题描述：{problem}"},
+        {"title": "根因：{root_cause}"},
+        {"title": "解决方案：{solution}"},
+        {"title": "影响范围", "children": "impact_scope"},
+        {"title": "是否涉及性能测试", "children": [{"title": "否"}]},
+        {"title": "参考资料", "children": "references"},
+        {"title": "涉及信息汇总", "children": "summary"}
+      ]
+    },
+    "test_analysis": {
+      "title": "测试分析",
+      "children": [
+        {
+          "title": "功能测试",
+          "children": [
+            {
+              "title": "候选税号筛选",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：税局服务中断后触发恢复扫描"},
+                {"title": "验证从 t_tax_declare_apply_record 表查询候选税号", "markers": ["task-done"]},
+                {"title": "过滤条件：areaCode 精确匹配", "markers": ["task-done"]},
+                {"title": "过滤条件：cache_flag=0", "markers": ["task-done"]},
+                {"title": "过滤条件：result_code in ('000','002')", "markers": ["task-done"]},
+                {"title": "过滤条件：login_time 在最近20分钟窗口内", "markers": ["task-done"]},
+                {"title": "验证不再依赖 Mongo KeepAlive 表", "markers": ["task-done"]},
+                {"title": "异常：areaCode 省级与地市级编码混用时是否漏数", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "Python Token校验",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：存在候选税号列表"},
+                {"title": "单个税号逐个调用 Python /etax/ck/token_info 接口", "markers": ["task-done"]},
+                {"title": "接口入参：税号、scene=ETAX_WARN_RECOVER_SCAN", "markers": ["task-done"]},
+                {"title": "返回 data 有值 → 视为存在有效 token", "markers": ["task-done"]},
+                {"title": "返回 data 为空 → 无有效 token，计入失败轮次", "markers": ["task-done"]},
+                {"title": "返回非成功码（非000000）→ 不发起采集，计入失败轮次", "markers": ["task-done"]},
+                {"title": "Apollo配置：token-check-single-url、token-check-scene、token-check-success-code", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "自动授权",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：命中有效 token"},
+                {"title": "校验固定采集企业是否具备该税号的税务授权", "markers": ["task-done"]},
+                {"title": "校验固定采集企业是否具备该税号的发票授权", "markers": ["task-done"]},
+                {"title": "缺失授权 → 自动补齐税+票授权", "markers": ["task-done"]},
+                {"title": "补授权失败 → 继续尝试下一个候选税号", "markers": ["task-done"]},
+                {"title": "授权已具备 → 直接发起采集", "markers": ["task-done"]},
+                {"title": "补充：发起采集时需对金蝶征信授权", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "采集发起",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：税号有效且授权完整"},
+                {"title": "创建采集记录并发起异步采集", "markers": ["task-done"]},
+                {"title": "本轮成功标准：response.judgeSuccess() 返回成功", "markers": ["task-done"]},
+                {"title": "注意：本轮仅判断发起是否成功，不判断采集结果", "markers": ["task-done"]},
+                {"title": "采集最终结果由下一轮扫描继续判断", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "多税号轮询",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：多个候选税号"},
+                {"title": "当前税号发起失败 → 继续尝试下一个", "markers": ["task-done"]},
+                {"title": "全部候选税号均失败 → 终止本轮，等待下一轮自动扫描", "markers": ["task-done"]},
+                {"title": "验证多税号轮询兜底逻辑", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "滑动窗口检测",
+              "priority": 1,
+              "children": [
+                {"title": "有效窗口定义：近20分钟内至少1个税号在Redis中有效（无论采集是否成功）", "markers": ["task-done"]},
+                {"title": "无效窗口定义：近20分钟内无登录成功记录，或所有税号均无效", "markers": ["task-done"]},
+                {"title": "有效窗口后：无效窗口计数器不增加", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "计数器管理",
+              "priority": 1,
+              "children": [
+                {
+                  "title": "连续成功计数器",
+                  "children": [
+                    {"title": "采集失败时：计数器清零为0", "markers": ["task-done"]},
+                    {"title": "采集失败后：下次触发间隔变为20分钟", "markers": ["task-done"]},
+                    {"title": "连续3次采集成功 → 判定恢复", "markers": ["task-done"]},
+                    {"title": "判定恢复后：所有计数器重置，流程结束", "markers": ["task-done"]}
+                  ]
+                },
+                {
+                  "title": "无效窗口计数器",
+                  "children": [
+                    {"title": "连续9个无效窗口 → 触发人工预警", "markers": ["task-done"]},
+                    {"title": "触发预警后：计数器重置为0，重新开始计数", "markers": ["task-done"]},
+                    {"title": "预警后行为：流程不中断，继续运行", "markers": ["task-done"]}
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "定时触发",
+              "priority": 2,
+              "children": [
+                {"title": "采集成功后：下次窗口触发间隔为5分钟", "markers": ["task-done"]},
+                {"title": "采集失败后：等待间隔为20分钟", "markers": ["task-done"]},
+                {"title": "全自动持续重试，无需人工干预", "markers": ["task-done"]}
+              ]
+            }
+          ]
+        },
+        {
+          "title": "云之家预警测试",
+          "priority": 1,
+          "children": [
+            {"title": "前置条件：连续9轮扫描均未成功发起采集"},
+            {"title": "发送云之家预警消息", "markers": ["task-done"]},
+            {"title": "按 t_pre_warn_task.phone 执行 @ 提醒", "markers": ["task-done"]},
+            {"title": "phone 为空时：发送预警但不执行 @ 提醒", "markers": ["task-done"]},
+            {"title": "关闭当前任务", "markers": ["task-done"]},
+            {"title": "同步将 t_pre_warn_task 更新为失败", "markers": ["task-done"]},
+            {"title": "warnTaskId 关联任务手机号进行 @ 提醒", "markers": ["task-done"]}
+          ]
+        },
+        {
+          "title": "异常/边界测试",
+          "priority": 1,
+          "children": [
+            {"title": "候选税号列表为空时的处理", "markers": ["task-done"]},
+            {"title": "Python 接口超时或网络异常的处理", "markers": ["task-done"]},
+            {"title": "补授权接口调用失败的处理", "markers": ["task-done"]},
+            {"title": "采集发起接口返回非成功的处理", "markers": ["task-done"]},
+            {"title": "连续成功判定后再次触发扫描的行为", "markers": ["task-done"]},
+            {"title": "预警触发后再次出现有效窗口的行为", "markers": ["task-done"]},
+            {"title": "异步采集结果与下一轮扫描的状态同步", "markers": ["task-done"]}
+          ]
+        },
+        {
+          "title": "数据验证",
+          "priority": 2,
+          "children": [
+            {"title": "t_tax_declare_apply_record 表数据筛选准确性", "markers": ["task-done"]},
+            {"title": "t_pre_warn_task 状态更新为失败", "markers": ["task-done"]},
+            {"title": "计数器状态重置准确性", "markers": ["task-done"]},
+            {"title": "成本表/账单表记录（如涉及）", "markers": ["task-done"]}
+          ]
+        }
+      ]
+    }
+  },
+  "dynamic_sections": {
+    "impact_scope": [
+      {"title": "税局服务监控恢复扫描"},
+      {"title": "候选税号筛选逻辑"},
+      {"title": "Python token 校验接口"},
+      {"title": "固定采集企业税票授权"},
+      {"title": "连续失败预警与任务终止"}
+    ],
+    "references": [
+      {"title": "需求描述"},
+      {"title": "自测报告", "children": [
+        {"title": "Java", "children": [{"title": "见开发提测文档"}]},
+        {"title": "Python", "children": [{"title": "token有效性查询"}]}
+      ]}
+    ],
+    "summary": [
+      {"title": "涉及服务：fintech-jwy-tax、python_etax"},
+      {"title": "涉及表：t_tax_declare_apply_record、t_pre_warn_task、app_keep_alive"},
+      {"title": "涉及接口：/etax/ck/token_info"},
+      {"title": "涉及核心类：CookieEtaxTriggerAutomator、WarnAutoCollectTokenCheckService、TaxDeclareApplyRecordService、TaxAreaAutoSwitchManager、TaxProperties"},
+      {"title": "开发分支：feat_260417_cookieEtaxUpdate_HG、dev_wn_260417_token"},
+      {"title": "Apollo配置项", "children": [
+        {"title": "tax.warn-auto-collect-config.token-check-single-url"},
+        {"title": "tax.warn-auto-collect-config.token-check-batch-url"},
+        {"title": "tax.warn-auto-collect-config.token-check-scene"},
+        {"title": "tax.warn-auto-collect-config.token-check-success-code"}
+      ]},
+      {"title": "涉及定时任务：待补充"}
+    ]
+  }
+}

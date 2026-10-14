@@ -1,0 +1,23 @@
+{
+  "id": "database_mybatis",
+  "category": "数据库落库",
+  "requirement_facts": {
+    "tables": {
+      "t_archive_task": {
+        "content": "t_archive_task",
+        "source": "normalized_requirement.md#落库表"
+      }
+    }
+  },
+  "mapper_sql": "<mapper namespace=\"ArchiveMapper\"><insert id=\"save\">INSERT INTO t_archive_task(id, status) VALUES(#{id}, #{status})</insert><select id=\"find\">SELECT * FROM t_archive_task WHERE id = #{id}</select></mapper>",
+  "expected": {
+    "summary": {
+      "一致": 1,
+      "缺失": 0,
+      "不一致": 0,
+      "额外实现": 0,
+      "证据不足": 0,
+      "总计": 1
+    }
+  }
+}

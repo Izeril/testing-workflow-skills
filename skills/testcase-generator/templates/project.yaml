@@ -1,0 +1,31 @@
+# 项目知识库配置模板（不是 skill 运行配置）
+# 使用方法：复制到 {项目根目录}/.skill/project.yaml 并填写项目与知识库信息。
+# skill 的运行配置固定随 skill 保存在 ../config.yaml。
+
+# ===== 项目基本信息 =====
+project:
+  name: ""                   # 项目名称（如：效贷、泾渭云等）
+
+# ===== 测试平台默认值 =====
+defaults:
+  team: ""                   # 项目组名称
+  product: ""                # 产品名称
+  modulePath: ""             # 模块路径
+  caseLevel: "P1"            # 默认用例级别（P0/P1/P2/P3）
+  source: "需求文档"          # 默认来源
+  autoState: "否"            # 默认自动化状态
+  separator: ""              # 分隔符
+
+# ===== 知识库配置 =====
+knowledge_base:
+  # 相对路径（相对于项目根目录）
+  relative_path: ".skill/knowledge-base"
+  # 注：如需使用绝对路径，配置 absolute_path
+
+# ===== 文件命名规则 =====
+naming:
+  archive_format: "{编号}_{名称}_{日期}"
+  archive_format_no_code: "{名称}_{日期}"
+  testpoint_format: "{名称}_测试点_v1.0-ai.xmind"
+  reviewed_format: "{名称}_reviewed.xmind"
+  testcase_format: "{名称}_测试用例.xlsx"

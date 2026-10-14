@@ -1,0 +1,6 @@
+interface:
+  display_name: "DOC to Markdown"
+  short_description: "Convert legacy Word documents to Markdown."
+  default_prompt: "Use $doc-to-md to convert this requirement document to Markdown."
+policy:
+  allow_implicit_invocation: true

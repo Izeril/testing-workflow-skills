@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "artifacts": {
+    "requirement_facts": {"required": ["schema_version", "producer", "items", "quality_summary"]},
+    "code_analysis": {"required": ["files_changed", "technology_coverage"], "remote_required": ["analysis_mode", "dimension_coverage", "analysis_capabilities"]},
+    "code_evidence": {"required": ["schema_version", "producer", "coverage_summary"]},
+    "requirement_code_comparison": {"schema_version": "1.1.0", "required": ["schema_version", "summary", "items"]},
+    "requirement_code_audit": {"schema_version": "1.0.0", "required": ["schema_version", "producer", "run_id", "workflow_version", "status", "mode", "inputs", "targets", "quality_summary", "warnings", "artifacts"]}
+  }
+}

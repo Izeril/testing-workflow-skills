@@ -1,0 +1,6 @@
+interface:
+  display_name: "XMind Generator"
+  short_description: "Generate review and executable XMind test files."
+  default_prompt: "Use $xmind-generator to create review XMind files from detailed test points."
+policy:
+  allow_implicit_invocation: true

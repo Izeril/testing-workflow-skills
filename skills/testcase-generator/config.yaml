@@ -1,0 +1,118 @@
+# ============================================================================
+# 测试用例生成器 — 可分发的机器无关默认配置
+# 本机值放入 config.local.yaml，CI 可使用 TESTCASE_* 环境变量覆盖
+# ============================================================================
+
+project:
+  name: ""
+  product: ""
+  company: ""
+  manager: ""
+
+repo:
+  path: ""
+  baseline: "origin/master"
+  uat_branch: "origin/uat_merge"
+  # uat 为默认正式测试环境分析；需要开发左移预分析时显式覆盖为 development。
+  analysis_mode: "uat"
+  # 正式 UAT 要求完整关键影响证据，索引滞后自身只提示。
+  codegraph_policy: "risk_based"
+  # strict 才要求图索引一致；默认可用目标 SHA 源码补核。
+  require_codegraph_for_uat: true
+  # 默认定向刷新开发分支、基线和 UAT 分支；离线分析时显式使用 --no-refresh-remote。
+  refresh_remote_refs: true
+  # 可选：Codegraph MCP 查询结果 JSON。多目标结果使用 targets 数组。
+  codegraph_impact_path: ""
+  # 多服务需求必须配置服务到仓库的唯一映射，或通过 --code-targets
+  # 提供 JSON。目标可独立覆盖 uat_branch、analysis_mode、commit_range、
+  # requirement_id、shared_branch 和 require_codegraph_for_uat。
+  # targets:
+  #   - key: java-tax-collect
+  #     path: ""
+  #     baseline: "origin/master"
+  #     uat_branch: "origin/uat_merge"
+  #     languages: ["java"]
+  #     services: ["tax-collect"]
+  #   - key: python-etax
+  #     path: "<python-repo-path>"
+  #     baseline: "origin/master"
+  #     uat_branch: "origin/uat_merge"
+  #     languages: ["python"]
+  #     services: ["python-etax", "plus-python-etax"]
+
+env:
+  default: "FAT/UAT"
+  pre_condition: |
+    1. FAT/UAT环境已部署
+    2. StarRocks集群正常运行
+    3. 中台ODS数据已同步
+    4. Capital服务已启动
+
+workflow:
+  version: "4.0"
+  state_file: ".ai-internal/workflow_state.json"
+  trace_file: ".ai-internal/execution_trace.json"
+  log_file: ".ai-internal/workflow_log.jsonl"
+  metrics_file: ".ai-internal/workflow_metrics.json"
+  metrics_report: "流程度量报告.md"
+  cache_hours: 24
+  default_step: "all"
+
+output:
+  dir_name: "测试分析"
+  internal_dir: ".ai-internal"
+
+knowledge_base:
+  frequency_threshold: 3
+  top_n: 10
+  cold_start_threshold: 3
+  cold_start_fallback:
+    enabled: true
+    sources:
+      - "Spring 官方文档"
+      - "阿里云/腾讯云微服务最佳实践"
+      - "行业通用架构模式"
+
+testcase:
+  priority_keywords:
+    - "异常"
+    - "错误"
+    - "超时"
+    - "失败"
+    - "非法"
+    - "容错"
+    - "恢复"
+    - "核心"
+    - "主流程"
+    - "关键"
+    - "检索"
+    - "查询"
+    - "计算"
+    - "校验"
+    - "完整"
+    - "准确"
+    - "一致性"
+    - "丢失"
+    - "泄漏"
+    - "映射"
+    - "转换"
+    - "安全"
+    - "权限"
+    - "认证"
+    - "加密"
+    - "合规"
+    - "敏感"
+    - "崩溃"
+    - "阻塞"
+    - "死锁"
+    - "连接"
+    - "中断"
+    - "接口"
+    - "集成"
+    - "交互"
+    - "上下游"
+    - "依赖"
+  case_type_rules:
+    异常: ["异常", "失败", "超时", "错误", "非法", "容错"]
+    性能: ["性能", "响应时间", "吞吐", "并发"]
+    边界: ["边界", "闰年", "跨年", "跨月", "最大值", "最小值", "空值"]

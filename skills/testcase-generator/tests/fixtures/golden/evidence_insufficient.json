@@ -1,0 +1,35 @@
+{
+  "id": "evidence_insufficient",
+  "category": "代码证据不足",
+  "requirement_facts": {
+    "errors": {
+      "coverage_status": "complete",
+      "comparison_policy": "value",
+      "items": [
+        {
+          "stable_key": "retry_policy",
+          "value": "最多重试3次后告警",
+          "evidence": "normalized_requirement.md#异常恢复"
+        }
+      ]
+    }
+  },
+  "code_evidence": {
+    "errors": {
+      "coverage_status": "partial",
+      "comparison_policy": "value",
+      "items": []
+    }
+  },
+  "expected": {
+    "summary": {
+      "一致": 0,
+      "缺失": 0,
+      "不一致": 0,
+      "额外实现": 0,
+      "证据不足": 1,
+      "总计": 1
+    },
+    "warning_code": "partial_dimension_coverage"
+  }
+}

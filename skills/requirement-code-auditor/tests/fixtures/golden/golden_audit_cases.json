@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "cases": [
+    {"id": "consistent-single-repo", "requirement": "POST /api/orders 创建订单", "release_test": "feature/consistent", "code_evidence": {"apis": ["POST /api/orders"]}, "expected": "一致"},
+    {"id": "missing-single-repo", "requirement": "POST /api/refunds 创建退款", "release_test": "feature/missing", "code_evidence": {"apis": ["POST /api/orders"]}, "expected": "缺失"},
+    {"id": "inconsistent-multi-repo", "requirement": "每页 20 条", "release_test": ["feature/java", "feature/python"], "code_evidence": {"pagination": {"page_size": 50}}, "expected": "不一致"},
+    {"id": "ambiguous-target", "requirement": "必须完成审批", "release_test": "feature/A、hotfix/B", "code_evidence": {}, "expected": "blocked"},
+    {"id": "partial-coverage", "requirement": "POST /api/external 查询外部数据", "release_test": "feature/partial", "code_evidence": {"coverage_status": "partial"}, "expected": "证据不足"}
+  ]
+}

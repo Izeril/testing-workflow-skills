@@ -1,0 +1,45 @@
+{
+  "id": "data_collection_pagination",
+  "category": "数据采集与翻页",
+  "requirement_facts": {
+    "pagination": {
+      "coverage_status": "complete",
+      "comparison_policy": "value",
+      "items": [
+        {
+          "stable_key": "max_page_size",
+          "value": 100,
+          "evidence": "normalized_requirement.md#翻页上限"
+        }
+      ]
+    }
+  },
+  "code_evidence": {
+    "pagination": {
+      "coverage_status": "complete",
+      "comparison_policy": "value",
+      "items": [
+        {
+          "stable_key": "max_page_size",
+          "value": 200,
+          "evidence": "CollectorConfig.java:18"
+        }
+      ]
+    }
+  },
+  "requirement_markdown": "采集按页执行，最大页数以计费说明为准。\n\n[计费与翻页说明](https://example.invalid/billing.xlsx)",
+  "expected": {
+    "summary": {
+      "一致": 0,
+      "缺失": 0,
+      "不一致": 1,
+      "额外实现": 0,
+      "证据不足": 0,
+      "总计": 1
+    },
+    "source_inventory": {
+      "linked_missing_count": 1,
+      "decision_required_count": 1
+    }
+  }
+}

@@ -1,0 +1,48 @@
+project:
+  product: ""
+
+code_source:
+  provider: gitnexus
+  allow_local_fallback: false
+
+gitnexus:
+  url: ""  # 本机 config.local.yaml 或 AUDITOR_GITNEXUS_URL 提供
+  protocol_version: "2025-03-26"
+  connect_timeout_seconds: 10
+  request_timeout_seconds: 60
+  max_retries: 1
+  max_queries_per_fact: 3
+  max_symbols_per_fact: 10
+  include_content: true
+
+repo:
+  baseline: origin/master
+
+analysis:
+  default_mode: audit
+  cache_hours: 24
+  require_release_test_document: true
+  max_parallel_targets: 2
+  batch_files: 50
+  max_batches: 0
+  model_batch_files: 20
+  model_batch_chars: 120000
+  single_file_chars: 40000
+
+codegraph:
+  enabled: false
+  index_path: ""
+
+quality_gate:
+  require_branch_scope: true
+  forbid_workspace_fallback: true
+  allow_graph_only_match: false
+  unresolved_as_insufficient: true
+
+output:
+  dir_name: 测试分析
+  internal_dir: .ai-internal
+
+legacy_workflow:
+  enabled: false
+  output_dir_name: legacy

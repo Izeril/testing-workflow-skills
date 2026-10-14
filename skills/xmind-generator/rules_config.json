@@ -1,0 +1,84 @@
+{
+  "common_templates": {
+    "startup": {
+      "pattern": "能否正常启动|能否正常执行|能否正常运行",
+      "steps_template": "1.触发{action}\n2.观察执行状态和日志\n3.验证任务状态",
+      "expected_template": "{action}正常启动，状态显示RUNNING"
+    },
+    "logging": {
+      "pattern": "日志记录是否正确|日志是否完整",
+      "steps_template": "1.执行{action}\n2.查询日志表/文件\n3.检查日志字段完整性",
+      "expected_template": "日志记录完整，关键字段正确"
+    },
+    "data_integrity": {
+      "pattern": "数据完整性|数据是否完整|数据总量",
+      "steps_template": "1.查询目标表数据量\n2.对比源数据总量\n3.验证数据一致性",
+      "expected_template": "数据总量一致，无缺失"
+    },
+    "field_mapping": {
+      "pattern": "字段映射|字段对应",
+      "steps_template": "1.查看配置中字段映射规则\n2.查询目标表结构\n3.逐一验证字段对应关系",
+      "expected_template": "字段映射正确，类型匹配"
+    },
+    "exception": {
+      "pattern": "异常.*处理|错误.*处理|失败.*处理",
+      "steps_template": "1.模拟异常场景\n2.观察系统响应\n3.检查日志记录和状态",
+      "expected_template": "异常正确处理，日志记录完整"
+    },
+    "config": {
+      "pattern": "配置.*正确|配置.*生效|配置.*加载",
+      "steps_template": "1.查看配置中心配置项\n2.验证配置加载状态\n3.检查配置生效情况",
+      "expected_template": "配置正确加载并生效"
+    },
+    "performance": {
+      "pattern": "性能.*符合|执行时间|响应时间|资源占用",
+      "steps_template": "1.执行操作并记录时间\n2.监控资源使用情况\n3.对比性能阈值",
+      "expected_template": "性能指标在预期范围内"
+    },
+    "api": {
+      "pattern": "接口.*调用|接口.*返回|接口.*正常",
+      "steps_template": "1.调用接口\n2.检查返回状态和数据\n3.验证返回格式",
+      "expected_template": "接口正常响应，返回数据正确"
+    },
+    "concurrent": {
+      "pattern": "并发.*处理|并发.*能力",
+      "steps_template": "1.多线程并发执行操作\n2.观察系统响应\n3.检查数据一致性",
+      "expected_template": "并发正确处理，无冲突"
+    },
+    "recovery": {
+      "pattern": "恢复.*能力|恢复.*正常|中断.*恢复",
+      "steps_template": "1.模拟中断场景\n2.恢复后观察续传情况\n3.验证数据完整性",
+      "expected_template": "恢复后自动续传，数据完整"
+    },
+    "ui_display": {
+      "pattern": "页面.*展示|页面.*显示|页面.*刷新",
+      "steps_template": "1.打开目标页面\n2.检查数据展示\n3.验证显示正确性",
+      "expected_template": "页面数据展示正确"
+    }
+  },
+  "project_rules": {},
+  "variable_extraction": {
+    "table_name": {
+      "pattern": "(\\w+(?:_\\w+)*)(?:表)",
+      "description": "从标题提取表名，如：验证company_base表数据完整性 -> company_base"
+    },
+    "service_name": {
+      "pattern": "(SFTP|StarRocks|MongoDB|Apollo|ETL|MySQL|Redis|Kafka)",
+      "description": "从标题提取服务名，如：验证SFTP连接中断时的处理 -> SFTP"
+    },
+    "interface_name": {
+      "pattern": "(\\d+-\\d+接口|\\w+接口)",
+      "description": "从标题提取接口名"
+    },
+    "task_name": {
+      "pattern": "(gs\\w+Sync|\\w+Job|\\w+Task)",
+      "description": "从标题提取任务名"
+    }
+  },
+  "project_detection": {
+    "directory_patterns": {},
+    "content_keywords": {}
+  },
+  "version": "2.0",
+  "description": "XMind 通用初始规则；项目专用规则与 KYM 映射从本机及需求工作副本加载"
+}

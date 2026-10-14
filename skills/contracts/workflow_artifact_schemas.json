@@ -1,0 +1,1056 @@
+{
+  "schema_version": "1.0.0",
+  "schemas": {
+    "business_impact": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "analysis_mode",
+        "items",
+        "evidence_catalog",
+        "summary"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.1.0"
+        },
+        "workflow_version": {
+          "type": "string",
+          "min_length": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "min_length": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "skipped",
+            "blocked",
+            "completed"
+          ]
+        },
+        "skip_reason": {
+          "type": "string"
+        },
+        "block_reason": {
+          "type": "string"
+        },
+        "analysis_mode": {
+          "type": "string",
+          "enum": [
+            "uat_confirmed",
+            "development_preanalysis",
+            "uat_blocked",
+            "uat_merged_evidence_incomplete",
+            "uat_blocked_with_development_preanalysis",
+            "not_applicable",
+            "code_analysis_blocked",
+            "uat_source_verified"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "unique_by": "impact_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "impact_id",
+              "target_id",
+              "business_domain",
+              "affected_actor",
+              "impact_category",
+              "validation_object",
+              "business_scenario",
+              "trigger",
+              "preconditions",
+              "previous_behavior",
+              "new_behavior",
+              "expected_result",
+              "business_rule",
+              "data_impact",
+              "state_impact",
+              "downstream_impact",
+              "exception_impact",
+              "test_focus",
+              "regression_scope",
+              "confidence",
+              "evidence_ids"
+            ],
+            "properties": {
+              "impact_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "target_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "business_domain": {
+                "type": "string",
+                "min_length": 1
+              },
+              "affected_actor": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string",
+                  "min_length": 1
+                }
+              },
+              "impact_category": {
+                "type": "string",
+                "min_length": 1
+              },
+              "validation_object": {
+                "type": "string",
+                "min_length": 1
+              },
+              "business_scenario": {
+                "type": "string",
+                "min_length": 1
+              },
+              "trigger": {
+                "type": "string",
+                "min_length": 1
+              },
+              "preconditions": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "previous_behavior": {
+                "type": "string",
+                "min_length": 1
+              },
+              "new_behavior": {
+                "type": "string",
+                "min_length": 1
+              },
+              "expected_result": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "business_rule": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "data_impact": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "state_impact": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "downstream_impact": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exception_impact": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "test_focus": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "regression_scope": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "high",
+                  "medium",
+                  "potential",
+                  "unknown"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "min_items": 1,
+                "items": {
+                  "type": "string",
+                  "min_length": 1
+                }
+              },
+              "risk_notes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "technical_evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "evidence_catalog": {
+          "type": "array",
+          "unique_by": "evidence_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "evidence_id",
+              "type",
+              "target_id",
+              "source"
+            ],
+            "properties": {
+              "evidence_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "code_change",
+                  "business_rule",
+                  "call_chain"
+                ]
+              },
+              "target_id": {
+                "type": "string",
+                "min_length": 1
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "total",
+            "confirmed",
+            "high",
+            "medium",
+            "potential"
+          ],
+          "properties": {
+            "total": {
+              "type": "integer"
+            },
+            "confirmed": {
+              "type": "integer"
+            },
+            "high": {
+              "type": "integer"
+            },
+            "medium": {
+              "type": "integer"
+            },
+            "potential": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "testpoints": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "test_points"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "workflow_version": {
+          "type": "string",
+          "min_length": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "min_length": 1
+        },
+        "test_points": {
+          "type": "array",
+          "unique_by": "testpoint_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "testpoint_id",
+              "title",
+              "category",
+              "type",
+              "coverage_ids",
+              "source_type"
+            ],
+            "properties": {
+              "testpoint_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "title": {
+                "type": "string",
+                "min_length": 1
+              },
+              "category": {
+                "type": "string",
+                "min_length": 1
+              },
+              "type": {
+                "type": "string",
+                "min_length": 1
+              },
+              "priority": {
+                "type": "string",
+                "enum": [
+                  "P0",
+                  "P1",
+                  "P2",
+                  "P3"
+                ]
+              },
+              "steps": {
+                "type": "string"
+              },
+              "expected": {
+                "type": "string"
+              },
+              "coverage_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "min_length": 1
+                }
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "min_length": 1
+                }
+              },
+              "source_type": {
+                "type": "string",
+                "min_length": 1
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "high",
+                  "medium",
+                  "low",
+                  "potential",
+                  "unknown",
+                  ""
+                ]
+              },
+              "candidate_quality": {
+                "type": "string",
+                "enum": [
+                  "high",
+                  "medium",
+                  "low",
+                  ""
+                ]
+              },
+              "xmind_entry_status": {
+                "type": "string",
+                "enum": [
+                  "ready",
+                  "ready_after_review",
+                  "review_required",
+                  "hold_for_manual_refine"
+                ]
+              },
+              "requires_human_confirm": {
+                "type": "boolean"
+              },
+              "auto_repaired": {
+                "type": "boolean"
+              },
+              "source_requirement_sha256": {
+                "type": "string",
+                "pattern": "^$|^[0-9a-fA-F]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "decision_register": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "items"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "items": {
+          "type": "array",
+          "unique_by": "issue_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "issue_id",
+              "title",
+              "severity",
+              "status",
+              "decision",
+              "decision_type",
+              "confirmed_by",
+              "confirmed_at",
+              "affects_test_design"
+            ],
+            "properties": {
+              "issue_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "title": {
+                "type": "string",
+                "min_length": 1
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "critical",
+                  "major",
+                  "minor"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "min_length": 1
+              },
+              "decision": {
+                "type": "string"
+              },
+              "decision_type": {
+                "type": "string",
+                "enum": [
+                  "",
+                  "accept",
+                  "accept_with_constraint",
+                  "reject",
+                  "defer",
+                  "not_applicable"
+                ]
+              },
+              "confirmed_by": {
+                "type": "string"
+              },
+              "confirmed_at": {
+                "type": "string",
+                "pattern": "^$|^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "affects_test_design": {
+                "type": "boolean"
+              },
+              "decision_options": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "accept",
+                    "accept_with_constraint",
+                    "reject",
+                    "defer",
+                    "not_applicable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "source_inventory": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "documents",
+        "attachments",
+        "images",
+        "summary"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "workflow_version": {
+          "type": "string",
+          "min_length": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "min_length": 1
+        },
+        "documents": {
+          "type": "array",
+          "min_items": 1,
+          "unique_by": "source_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "source_id",
+              "kind",
+              "original_path",
+              "normalized_path",
+              "conversion_status"
+            ],
+            "properties": {
+              "source_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "requirement",
+                  "design",
+                  "test",
+                  "other"
+                ]
+              },
+              "original_path": {
+                "type": "string",
+                "min_length": 1
+              },
+              "normalized_path": {
+                "type": "string",
+                "min_length": 1
+              },
+              "conversion_status": {
+                "type": "string",
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_required"
+                ]
+              }
+            }
+          }
+        },
+        "attachments": {
+          "type": "array",
+          "unique_by": "attachment_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "attachment_id",
+              "name",
+              "source_document",
+              "url",
+              "local_path",
+              "availability",
+              "decision_required",
+              "context"
+            ],
+            "properties": {
+              "attachment_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "name": {
+                "type": "string",
+                "min_length": 1
+              },
+              "source_document": {
+                "type": "string",
+                "min_length": 1
+              },
+              "url": {
+                "type": "string",
+                "min_length": 1
+              },
+              "local_path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "availability": {
+                "type": "string",
+                "enum": [
+                  "local_available",
+                  "linked_available",
+                  "linked_missing",
+                  "unreadable",
+                  "not_applicable"
+                ]
+              },
+              "decision_required": {
+                "type": "boolean"
+              },
+              "context": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "images": {
+          "type": "array",
+          "unique_by": "attachment_id",
+          "items": {
+            "type": "object",
+            "required": [
+              "attachment_id",
+              "name",
+              "source_document",
+              "url",
+              "local_path",
+              "availability",
+              "decision_required",
+              "context"
+            ],
+            "properties": {
+              "attachment_id": {
+                "type": "string",
+                "min_length": 1
+              },
+              "name": {
+                "type": "string",
+                "min_length": 1
+              },
+              "source_document": {
+                "type": "string",
+                "min_length": 1
+              },
+              "url": {
+                "type": "string",
+                "min_length": 1
+              },
+              "local_path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "availability": {
+                "type": "string",
+                "enum": [
+                  "local_available",
+                  "linked_available",
+                  "linked_missing",
+                  "unreadable",
+                  "not_applicable"
+                ]
+              },
+              "decision_required": {
+                "type": "boolean"
+              },
+              "context": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "attachment_count",
+            "image_count",
+            "linked_missing_count",
+            "unreadable_count",
+            "decision_required_count"
+          ],
+          "properties": {
+            "attachment_count": {
+              "type": "integer"
+            },
+            "image_count": {
+              "type": "integer"
+            },
+            "linked_missing_count": {
+              "type": "integer"
+            },
+            "unreadable_count": {
+              "type": "integer"
+            },
+            "decision_required_count": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "workflow_metrics": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "run_id",
+        "summary",
+        "current_run",
+        "human_confirmation",
+        "stages",
+        "recent_events",
+        "artifacts",
+        "definitions"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "workflow_version": {
+          "type": "string",
+          "min_length": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "min_length": 1
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "stage_count",
+            "latest_passed_stage_count",
+            "workflow_completion_rate",
+            "attempt_count",
+            "passed_attempt_count",
+            "failed_attempt_count",
+            "historical_pass_rate",
+            "total_duration_seconds",
+            "run_count",
+            "requested_scope_stage_count",
+            "requested_scope_passed_stage_count",
+            "requested_scope_completion",
+            "full_workflow_completion",
+            "human_confirmation_completion",
+            "human_confirmation_status"
+          ],
+          "properties": {
+            "stage_count": {
+              "type": "integer"
+            },
+            "latest_passed_stage_count": {
+              "type": "integer"
+            },
+            "workflow_completion_rate": {
+              "type": "number"
+            },
+            "attempt_count": {
+              "type": "integer"
+            },
+            "passed_attempt_count": {
+              "type": "integer"
+            },
+            "failed_attempt_count": {
+              "type": "integer"
+            },
+            "historical_pass_rate": {
+              "type": "number"
+            },
+            "total_duration_seconds": {
+              "type": "number"
+            },
+            "run_count": {
+              "type": "integer"
+            },
+            "requested_scope_stage_count": {
+              "type": "integer"
+            },
+            "requested_scope_passed_stage_count": {
+              "type": "integer"
+            },
+            "requested_scope_completion": {
+              "type": "number"
+            },
+            "full_workflow_completion": {
+              "type": "number"
+            },
+            "human_confirmation_completion": {
+              "type": "number"
+            },
+            "human_confirmation_status": {
+              "type": "string",
+              "min_length": 1
+            }
+          }
+        },
+        "current_run": {
+          "type": "object",
+          "required": [
+            "run_id",
+            "attempted_stage_count",
+            "passed_stage_count",
+            "failed_stage_count",
+            "duration_seconds"
+          ],
+          "properties": {
+            "run_id": {
+              "type": "string"
+            },
+            "attempted_stage_count": {
+              "type": "integer"
+            },
+            "passed_stage_count": {
+              "type": "integer"
+            },
+            "failed_stage_count": {
+              "type": "integer"
+            },
+            "duration_seconds": {
+              "type": "number"
+            }
+          }
+        },
+        "human_confirmation": {
+          "type": "object",
+          "required": [
+            "completed_count",
+            "gate_count",
+            "completion_rate",
+            "status",
+            "gates"
+          ],
+          "properties": {
+            "completed_count": {
+              "type": "integer"
+            },
+            "gate_count": {
+              "type": "integer"
+            },
+            "completion_rate": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string",
+              "min_length": 1
+            },
+            "gates": {
+              "type": "array",
+              "unique_by": "gate",
+              "items": {
+                "type": "object",
+                "required": [
+                  "gate",
+                  "name",
+                  "status"
+                ],
+                "properties": {
+                  "gate": {
+                    "type": "string",
+                    "enum": [
+                      "review_decisions",
+                      "final_xmind_confirmation",
+                      "archive_confirmation"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "min_length": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "completed",
+                      "awaiting",
+                      "not_reached"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "stages": {
+          "type": "array",
+          "unique_by": "step",
+          "items": {
+            "type": "object",
+            "required": [
+              "step",
+              "name",
+              "attempt_count",
+              "passed_count",
+              "failed_count",
+              "pass_rate",
+              "total_duration_seconds",
+              "last_duration_seconds",
+              "last_status",
+              "last_finished_at"
+            ],
+            "properties": {
+              "step": {
+                "type": "string",
+                "min_length": 1
+              },
+              "name": {
+                "type": "string",
+                "min_length": 1
+              },
+              "attempt_count": {
+                "type": "integer"
+              },
+              "passed_count": {
+                "type": "integer"
+              },
+              "failed_count": {
+                "type": "integer"
+              },
+              "pass_rate": {
+                "type": "number"
+              },
+              "total_duration_seconds": {
+                "type": "number"
+              },
+              "last_duration_seconds": {
+                "type": "number"
+              },
+              "last_status": {
+                "type": "string",
+                "enum": [
+                  "passed",
+                  "failed",
+                  "running",
+                  "not_started"
+                ]
+              },
+              "last_finished_at": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "recent_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "run_id",
+              "step",
+              "status",
+              "finished_at",
+              "duration_seconds",
+              "message",
+              "error_type"
+            ]
+          }
+        },
+        "artifacts": {
+          "type": "object",
+          "required": [
+            "requirement_fact_count",
+            "review",
+            "testpoints",
+            "review_changes",
+            "coverage",
+            "quality_gates",
+            "testcases",
+            "code_analysis"
+          ],
+          "properties": {
+            "requirement_fact_count": {
+              "type": "integer"
+            },
+            "review": {
+              "type": "object"
+            },
+            "testpoints": {
+              "type": "object",
+              "required": [
+                "total_count",
+                "p1_count",
+                "p2_or_other_count"
+              ]
+            },
+            "review_changes": {
+              "type": "object"
+            },
+            "coverage": {
+              "type": "object",
+              "required": [
+                "mapping_count",
+                "requirement_fact_count",
+                "p1_risk_coverage_rate",
+                "critical_state_transition_coverage_rate",
+                "important_review_question_coverage_rate"
+              ]
+            },
+            "quality_gates": {
+              "type": "object",
+              "required": [
+                "status",
+                "gate_count",
+                "passed_count",
+                "failed_count",
+                "warning_count",
+                "pass_rate"
+              ]
+            },
+            "testcases": {
+              "type": "object",
+              "required": [
+                "total_count",
+                "p1_count",
+                "p2_count"
+              ]
+            },
+            "code_analysis": {
+              "type": "object",
+              "required": [
+                "selected_file_count",
+                "coverage_gap_file_count",
+                "impact_confidence"
+              ]
+            }
+          }
+        },
+        "definitions": {
+          "type": "object",
+          "required": [
+            "stage_pass_rate",
+            "workflow_completion_rate",
+            "requested_scope_completion",
+            "full_workflow_completion",
+            "human_confirmation_completion",
+            "review_modification_rate",
+            "quality_gate_pass_rate",
+            "decision_completion_rate"
+          ]
+        }
+      }
+    }
+  }
+}

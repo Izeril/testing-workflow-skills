@@ -1,0 +1,416 @@
+{
+  "schema_version": "1.0.0",
+  "skills": {
+    "doc-to-md": {
+      "public_entrypoints": [
+        {
+          "path": "doc-to-md/doc_to_md.py",
+          "symbol": "convert_doc_to_md"
+        }
+      ],
+      "cli": "doc-to-md/doc_to_md.py",
+      "input": {
+        "type": "object",
+        "required": [
+          "input_path"
+        ],
+        "optional": [
+          "output_dir",
+          "converter_path"
+        ]
+      },
+      "output_artifact": "doc_conversion",
+      "compatibility": [
+        "UnsupportedDocFormatError"
+      ]
+    },
+    "testcase-generator": {
+      "public_entrypoints": [
+        {
+          "path": "testcase-generator/scripts/main.py",
+          "symbol": "cli_entrypoint"
+        }
+      ],
+      "cli": "testcase-generator/scripts/main.py",
+      "input": {
+        "type": "object",
+        "required": [
+          "directory"
+        ],
+        "optional": [
+          "repo",
+          "branch",
+          "baseline",
+          "step",
+          "code_targets",
+          "source_documents",
+          "refresh_documents",
+          "codegraph_policy",
+          "impact_evidence"
+        ]
+      },
+      "output_artifact": "workflow_metrics",
+      "compatibility": [
+        "workflow_analysis.run_requirement_analysis",
+        "workflow_testpoint.run_testpoint_generate"
+      ]
+    },
+    "xmind-generator": {
+      "public_entrypoints": [
+        {
+          "path": "xmind-generator/xmind_utils.py",
+          "symbol": "gen_id"
+        },
+        {
+          "path": "xmind-generator/xmind_utils.py",
+          "symbol": "make_node"
+        },
+        {
+          "path": "xmind-generator/xmind_utils.py",
+          "symbol": "create_xmind_file"
+        }
+      ],
+      "cli": "xmind-generator/review_xmind.py",
+      "input": {
+        "type": "object",
+        "required": [
+          "test_points_path"
+        ],
+        "optional": [
+          "output_dir",
+          "company",
+          "manager"
+        ]
+      },
+      "output_artifact": "xmind_zip",
+      "compatibility": [
+        "executable_xmind.py",
+        "generate_xmind.py"
+      ]
+    },
+    "requirement-code-auditor": {
+      "public_entrypoints": [
+        {
+          "path": "requirement-code-auditor/scripts/audit_runner.py",
+          "symbol": "run_requirement_code_audit"
+        },
+        {
+          "path": "requirement-code-auditor/scripts/workflow_api.py",
+          "symbol": "extract_business_logic",
+          "input": {
+            "required": [
+              "repo_path",
+              "branch"
+            ],
+            "optional": [
+              "baseline",
+              "selected_files"
+            ]
+          },
+          "output_artifact": "code_analysis"
+        },
+        {
+          "path": "requirement-code-auditor/scripts/workflow_api.py",
+          "symbol": "compare_structured",
+          "input": {
+            "required": [
+              "requirement_facts",
+              "code_evidence"
+            ],
+            "optional": [
+              "dimensions"
+            ]
+          },
+          "output_artifact": "requirement_code_comparison"
+        }
+      ],
+      "cli": "requirement-code-auditor/scripts/cli.py",
+      "input": {
+        "type": "object",
+        "required": [
+          "requirement_dir"
+        ],
+        "optional": [
+          "repo_path",
+          "branch",
+          "baseline",
+          "code_targets",
+          "config_path",
+          "output_dir",
+          "mode"
+        ]
+      },
+      "output_artifact": "requirement_code_audit",
+      "compatibility": [
+        "scripts.analyzer.analyze_code",
+        "scripts.comparator.compare_structured",
+        "scripts.comparator.compare_from_artifacts",
+        "scripts.comparator.compatibility.ReqCodeComparator"
+      ]
+    }
+  },
+  "artifacts": {
+    "code_analysis": {
+      "contract_version": "1.0.0",
+      "producer": "requirement-code-auditor",
+      "format": "json-object",
+      "required_keys": [
+        "data_flow",
+        "processing_rules",
+        "file_changes",
+        "business_rules",
+        "technology_coverage",
+        "coverage_summary"
+      ],
+      "compatible_producers": [
+        "code-analyzer"
+      ]
+    },
+    "doc_conversion": {
+      "contract_version": "1.0.0",
+      "producer": "doc-to-md",
+      "format": "markdown-with-assets",
+      "required_properties": [
+        "utf-8-markdown",
+        "relative-image-paths",
+        "quality-gate-before-write"
+      ]
+    },
+    "requirement_code_comparison": {
+      "contract_version": "1.1.0",
+      "producer": "requirement-code-auditor",
+      "format": "json-object",
+      "schema_version": "1.1.0",
+      "required_keys": [
+        "schema_version",
+        "summary",
+        "dimensions",
+        "items",
+        "warnings"
+      ],
+      "compatible_producers": [
+        "req-code-comparator"
+      ]
+    },
+    "workflow_metrics": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "run_id",
+        "summary",
+        "current_run",
+        "human_confirmation",
+        "stages",
+        "artifacts"
+      ],
+      "schema_ref": "workflow_artifact_schemas.json#/schemas/workflow_metrics"
+    },
+    "xmind_zip": {
+      "contract_version": "1.0.0",
+      "producer": "xmind-generator",
+      "format": "zip",
+      "required_entries": [
+        "content.json",
+        "metadata.json",
+        "manifest.json"
+      ]
+    },
+    "error_payload": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "generated_at",
+        "error_code",
+        "exit_code",
+        "error_type",
+        "message",
+        "context"
+      ]
+    },
+    "requirement_facts": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "items"
+      ],
+      "schema_ref": "artifact_schemas.json#/schemas/requirement_facts",
+      "compatible_producers": [
+        "requirement-code-auditor"
+      ]
+    },
+    "test_design_model": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "mode",
+        "risks",
+        "state_transitions",
+        "review_questions",
+        "quality_issues",
+        "consistency_summary",
+        "fix_suggestion_summary"
+      ],
+      "schema_ref": "artifact_schemas.json#/schemas/test_design_model"
+    },
+    "coverage_matrix": {
+      "contract_version": "2.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "requirement_facts",
+        "risks",
+        "state_transitions",
+        "review_questions",
+        "mappings",
+        "statistics",
+        "mode_selection"
+      ],
+      "schema_ref": "artifact_schemas.json#/schemas/coverage_matrix"
+    },
+    "quality_gate_report": {
+      "contract_version": "2.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "summary",
+        "gates",
+        "auto_repaired_count",
+        "auto_repaired_by_gate"
+      ],
+      "schema_ref": "artifact_schemas.json#/schemas/quality_gate_report"
+    },
+    "business_impact": {
+      "contract_version": "2.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.1.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "analysis_mode",
+        "items",
+        "evidence_catalog",
+        "summary"
+      ],
+      "schema_ref": "workflow_artifact_schemas.json#/schemas/business_impact"
+    },
+    "testpoints": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "test_points"
+      ],
+      "schema_ref": "workflow_artifact_schemas.json#/schemas/testpoints"
+    },
+    "decision_register": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "items"
+      ],
+      "schema_ref": "workflow_artifact_schemas.json#/schemas/decision_register"
+    },
+    "source_inventory": {
+      "contract_version": "1.0.0",
+      "producer": "testcase-generator",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "workflow_version",
+        "generated_at",
+        "documents",
+        "attachments",
+        "images",
+        "summary"
+      ],
+      "schema_ref": "workflow_artifact_schemas.json#/schemas/source_inventory"
+    },
+    "requirement_code_audit": {
+      "contract_version": "1.0.0",
+      "producer": "requirement-code-auditor",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "producer",
+        "run_id",
+        "workflow_version",
+        "status",
+        "mode",
+        "inputs",
+        "targets",
+        "quality_summary",
+        "warnings",
+        "artifacts"
+      ],
+      "schema_ref": "auditor_artifact_schemas.json#/schemas/requirement_code_audit"
+    },
+    "code_evidence": {
+      "contract_version": "1.0.0",
+      "producer": "requirement-code-auditor",
+      "format": "json-object",
+      "schema_version": "1.0.0",
+      "required_keys": [
+        "schema_version",
+        "producer",
+        "coverage_summary"
+      ],
+      "schema_ref": "auditor_artifact_schemas.json#/schemas/code_evidence"
+    }
+  },
+  "workflow_skills": [
+    "testcase-generator",
+    "doc-to-md",
+    "requirement-code-auditor",
+    "xmind-generator"
+  ],
+  "archived_skills": {
+    "code-analyzer": {
+      "archive_path": "../skills-archive/code-analyzer",
+      "replacement_skill": "requirement-code-auditor",
+      "lifecycle": "archived",
+      "runtime_callable": false
+    },
+    "req-code-comparator": {
+      "archive_path": "../skills-archive/req-code-comparator",
+      "replacement_skill": "requirement-code-auditor",
+      "lifecycle": "archived",
+      "runtime_callable": false
+    }
+  }
+}

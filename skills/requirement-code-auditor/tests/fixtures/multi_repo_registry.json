@@ -1,0 +1,20 @@
+{
+  "repo": {
+    "path": "",
+    "baseline": "origin/master",
+    "targets": [
+      {
+        "target_id": "java-tax-service",
+        "path": "C:/fixtures/java-tax-service",
+        "languages": ["java"],
+        "services": ["税务服务"]
+      },
+      {
+        "target_id": "python-collector",
+        "path": "C:/fixtures/python-collector",
+        "languages": ["python"],
+        "services": ["采集服务"]
+      }
+    ]
+  }
+}

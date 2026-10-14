@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "examples": {
+    "pagination": [
+      {"input": "每页展示20条，超过末页返回空列表", "type": "pagination", "normalized": {"page_size": 20, "overflow_behavior": "empty_list"}},
+      {"input": "支持翻页", "type": "pagination", "ambiguity": "未声明页大小和页码起点"}
+    ],
+    "sorting": [
+      {"input": "按申请时间最新优先", "type": "sorting", "normalized": {"field": "申请时间", "direction": "desc"}},
+      {"input": "默认倒序", "type": "sorting", "ambiguity": "未声明排序字段"}
+    ],
+    "errors": [
+      {"input": "未登录返回错误码 AUTH_001，并提示请先登录", "type": "errors", "normalized": {"error_code": "AUTH_001", "message": "请先登录"}},
+      {"input": "失败时友好提示", "type": "errors", "ambiguity": "未声明条件、错误码和文案"}
+    ],
+    "permissions": [{"input": "只有管理员可删除记录", "type": "rules"}],
+    "state_transitions": [{"input": "审核通过后状态改为已生效", "type": "state_transitions"}],
+    "calculations": [{"input": "税额等于计税金额乘税率", "type": "calculations"}],
+    "side_effects": [{"input": "保存后新增一条审计日志", "type": "side_effects"}],
+    "apis": [{"input": "POST /api/orders 创建订单", "type": "apis"}],
+    "jobs": [{"input": "定时任务 settlementJob 每日执行", "type": "jobs"}],
+    "configs": [{"input": "配置项 audit.enabled 控制审计开关", "type": "configs"}]
+  }
+}

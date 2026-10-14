@@ -1,0 +1,501 @@
+{
+  "schema_version": "1.0.0",
+  "status": "passed",
+  "manifest": "D:\\用户故事\\AI_Project\\.codex\\skills\\testcase-generator\\tests\\fixtures\\real_project_quality_baseline.json",
+  "project_root": "D:\\用户故事\\AI_Project",
+  "metrics": {
+    "project_count": 5,
+    "projects_present": 5,
+    "artifact_integrity_rate": 1.0,
+    "contract_pass_rate": 1.0,
+    "key_field_accuracy": 1.0,
+    "evidence_traceability_rate": 1.0,
+    "priority_coverage_rate": 1.0,
+    "semantic_label_accuracy": 1.0,
+    "high_risk_false_positive_rate": 0.0
+  },
+  "counts": {
+    "projects_present": 5,
+    "artifact_integrity_passed": 18,
+    "artifact_integrity_total": 18,
+    "contract_passed": 12,
+    "contract_total": 12,
+    "key_fields_passed": 25,
+    "key_fields_total": 25,
+    "evidence_passed": 108,
+    "evidence_total": 108,
+    "coverage_passed": 11,
+    "coverage_total": 11,
+    "semantic_labels_passed": 15,
+    "semantic_labels_total": 15,
+    "high_risk_false_positives": 0,
+    "benign_labels_total": 13
+  },
+  "thresholds": [
+    {
+      "threshold": "min_project_count",
+      "metric": "project_count",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "threshold": "min_projects_present",
+      "metric": "projects_present",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "threshold": "min_artifact_integrity_rate",
+      "metric": "artifact_integrity_rate",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "min_contract_pass_rate",
+      "metric": "contract_pass_rate",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "min_key_field_accuracy",
+      "metric": "key_field_accuracy",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "min_evidence_traceability_rate",
+      "metric": "evidence_traceability_rate",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "min_priority_coverage_rate",
+      "metric": "priority_coverage_rate",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "min_semantic_label_accuracy",
+      "metric": "semantic_label_accuracy",
+      "expected": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    {
+      "threshold": "max_high_risk_false_positive_rate",
+      "metric": "high_risk_false_positive_rate",
+      "expected": 0.0,
+      "actual": 0.0,
+      "passed": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "password-admission",
+      "source_root": "20260715/【泾渭云20260624】修改密码准入优化/测试分析/.ai-internal",
+      "present": true,
+      "artifacts": [
+        {
+          "filename": "requirement_facts.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": []
+        },
+        {
+          "filename": "coverage_matrix.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/statistics/testpoint_count",
+              "passed": true,
+              "actual": 8
+            },
+            {
+              "path": "/statistics/important_review_question_handled",
+              "passed": true,
+              "actual": 7
+            }
+          ],
+          "coverage": [
+            {
+              "path": "/statistics/p1_risk_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/critical_state_transition_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/important_review_question_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "filename": "quality_gate_report.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/summary/status",
+              "passed": true,
+              "actual": "passed"
+            },
+            {
+              "path": "/summary/blocking_count",
+              "passed": true,
+              "actual": 0
+            }
+          ]
+        }
+      ],
+      "semantic_replays": []
+    },
+    {
+      "id": "administrative-penalty-labels",
+      "source_root": "20260730/【泾渭云20260630】新增工商行政处罚标签2个&标签逻辑调整4个/测试分析/.ai-internal",
+      "present": true,
+      "artifacts": [
+        {
+          "filename": "requirement_facts_reviewed.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": []
+        },
+        {
+          "filename": "code_evidence_commit_6c56be4948.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": []
+        },
+        {
+          "filename": "requirement_code_comparison_reviewed.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": [
+            {
+              "path": "/summary/总计",
+              "passed": true,
+              "actual": 15
+            },
+            {
+              "path": "/summary/一致",
+              "passed": true,
+              "actual": 13
+            },
+            {
+              "path": "/summary/额外实现",
+              "passed": true,
+              "actual": 2
+            }
+          ],
+          "evidence": {
+            "passed": 28,
+            "total": 28
+          }
+        },
+        {
+          "filename": "coverage_matrix.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": [
+            {
+              "path": "/statistics/testpoint_count",
+              "passed": true,
+              "actual": 59
+            },
+            {
+              "path": "/statistics/p1_risk_covered",
+              "passed": true,
+              "actual": 7
+            }
+          ],
+          "coverage": [
+            {
+              "path": "/statistics/p1_risk_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/important_review_question_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "filename": "quality_gate_report.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/summary/status",
+              "passed": true,
+              "actual": "passed"
+            },
+            {
+              "path": "/summary/blocking_count",
+              "passed": true,
+              "actual": 0
+            }
+          ]
+        }
+      ],
+      "semantic_replays": [
+        {
+          "id": "reviewed-commit-6c56be4948",
+          "passed": true,
+          "expected_label_count": 15,
+          "actual_label_count": 15
+        }
+      ]
+    },
+    {
+      "id": "ns004-capital-fallback",
+      "source_root": "20260730/【泾渭云20260701】20260630 NS004类接口股东认缴、实缴金额字段优化/测试分析/.ai-internal",
+      "present": true,
+      "artifacts": [
+        {
+          "filename": "requirement_facts.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/items",
+              "passed": true,
+              "actual": 17
+            }
+          ],
+          "evidence": {
+            "passed": 17,
+            "total": 17
+          }
+        },
+        {
+          "filename": "coverage_matrix.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/statistics/testpoint_count",
+              "passed": true,
+              "actual": 51
+            }
+          ],
+          "coverage": [
+            {
+              "path": "/statistics/p1_risk_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/critical_state_transition_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/important_review_question_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "filename": "quality_gate_report.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/summary/status",
+              "passed": true,
+              "actual": "passed"
+            }
+          ]
+        }
+      ],
+      "semantic_replays": []
+    },
+    {
+      "id": "external-report-api-replacement",
+      "source_root": "20260730/【泾渭云20260707】工商司法报告（精斗云）调用接口替换/测试分析/.ai-internal",
+      "present": true,
+      "artifacts": [
+        {
+          "filename": "requirement_facts.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/items",
+              "passed": true,
+              "actual": 15
+            }
+          ],
+          "evidence": {
+            "passed": 15,
+            "total": 15
+          }
+        },
+        {
+          "filename": "test_design_model.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/risks",
+              "passed": true,
+              "actual": 2
+            },
+            {
+              "path": "/review_questions",
+              "passed": true,
+              "actual": 9
+            }
+          ]
+        },
+        {
+          "filename": "coverage_matrix.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/statistics/testpoint_count",
+              "passed": true,
+              "actual": 59
+            }
+          ],
+          "coverage": [
+            {
+              "path": "/statistics/p1_risk_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/critical_state_transition_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            },
+            {
+              "path": "/statistics/important_review_question_coverage_rate",
+              "value": 1.0,
+              "passed": true
+            }
+          ]
+        },
+        {
+          "filename": "quality_gate_report.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/summary/status",
+              "passed": true,
+              "actual": "passed"
+            },
+            {
+              "path": "/summary/blocking_count",
+              "passed": true,
+              "actual": 0
+            }
+          ]
+        }
+      ],
+      "semantic_replays": []
+    },
+    {
+      "id": "export-refund-dedup-migration",
+      "source_root": "20260813/【泾渭云20260721】出口退税落库异常/测试分析/.ai-internal",
+      "present": true,
+      "artifacts": [
+        {
+          "filename": "requirement_facts.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/items",
+              "passed": true,
+              "actual": 35
+            }
+          ],
+          "evidence": {
+            "passed": 35,
+            "total": 35
+          }
+        },
+        {
+          "filename": "business_impact.json",
+          "present": true,
+          "integrity": true,
+          "contract": true,
+          "checks": [
+            {
+              "path": "/items",
+              "passed": true,
+              "actual": 6
+            },
+            {
+              "path": "/summary/tester_readable",
+              "passed": true,
+              "actual": 6
+            }
+          ],
+          "evidence": {
+            "passed": 6,
+            "total": 6
+          }
+        },
+        {
+          "filename": "requirement_code_comparison.json",
+          "present": true,
+          "integrity": true,
+          "contract": null,
+          "checks": [
+            {
+              "path": "/summary/总计",
+              "passed": true,
+              "actual": 4
+            },
+            {
+              "path": "/summary/证据不足",
+              "passed": true,
+              "actual": 4
+            }
+          ],
+          "evidence": {
+            "passed": 7,
+            "total": 7
+          }
+        }
+      ],
+      "semantic_replays": []
+    }
+  ]
+}

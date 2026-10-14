@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "sample_count": 4,
+  "categories": [
+    "外部接口替换",
+    "数据采集与翻页",
+    "数据库落库",
+    "代码证据不足"
+  ],
+  "acceptance": {
+    "classification_mismatch_count": 0,
+    "high_risk_false_positive_count": 0,
+    "attachment_gate_mismatch_count": 0
+  },
+  "ci_command": "python -m unittest discover tests -p test_golden_semantic_regressions.py -v"
+}

@@ -1,0 +1,80 @@
+{
+  "name": "generic",
+  "title": "通用需求测试模板",
+  "keywords": [],
+  "description": "适用于一般功能需求的通用测试点模板",
+  "structure": {
+    "kym": {
+      "title": "KYM",
+      "children": [
+        {"title": "需求背景"},
+        {"title": "问题描述：{problem}"},
+        {"title": "根因：{root_cause}"},
+        {"title": "解决方案：{solution}"},
+        {"title": "影响范围", "children": "impact_scope"},
+        {"title": "是否涉及性能测试", "children": [{"title": "否"}]},
+        {"title": "参考资料", "children": "references"},
+        {"title": "涉及信息汇总", "children": "summary"}
+      ]
+    },
+    "test_analysis": {
+      "title": "测试分析",
+      "children": [
+        {
+          "title": "功能测试",
+          "children": [
+            {
+              "title": "正常流程",
+              "priority": 1,
+              "children": [
+                {"title": "前置条件：待补充"},
+                {"title": "操作步骤：待补充", "markers": ["task-done"]},
+                {"title": "预期结果：待补充", "markers": ["task-done"]}
+              ]
+            },
+            {
+              "title": "异常流程",
+              "priority": 1,
+              "children": [
+                {"title": "异常场景：待补充"},
+                {"title": "预期处理：待补充", "markers": ["task-done"]}
+              ]
+            }
+          ]
+        },
+        {
+          "title": "异常/边界测试",
+          "priority": 1,
+          "children": [
+            {"title": "空数据/异常输入处理", "markers": ["task-done"]},
+            {"title": "超时/网络异常处理", "markers": ["task-done"]},
+            {"title": "并发/重复操作处理", "markers": ["task-done"]}
+          ]
+        },
+        {
+          "title": "数据验证",
+          "priority": 2,
+          "children": [
+            {"title": "数据库记录准确性", "markers": ["task-done"]},
+            {"title": "状态流转正确性", "markers": ["task-done"]}
+          ]
+        }
+      ]
+    }
+  },
+  "dynamic_sections": {
+    "impact_scope": [
+      {"title": "待补充影响范围"}
+    ],
+    "references": [
+      {"title": "需求描述"},
+      {"title": "自测报告"}
+    ],
+    "summary": [
+      {"title": "涉及服务：待补充"},
+      {"title": "涉及表：待补充"},
+      {"title": "涉及接口：待补充"},
+      {"title": "涉及配置：待补充"}
+    ]
+  }
+}

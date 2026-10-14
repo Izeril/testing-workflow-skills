@@ -1,0 +1,40 @@
+{
+  "id": "external_api_replacement",
+  "category": "外部接口替换",
+  "requirement_facts": {
+    "apis": {
+      "coverage_status": "complete",
+      "comparison_policy": "identity",
+      "items": [
+        {
+          "stable_key": "/risk/v1/query",
+          "value": "旧风险查询接口",
+          "evidence": "normalized_requirement.md#接口替换"
+        }
+      ]
+    }
+  },
+  "code_evidence": {
+    "apis": {
+      "coverage_status": "complete",
+      "comparison_policy": "identity",
+      "items": [
+        {
+          "stable_key": "/risk/v2/query",
+          "value": "新风险查询接口",
+          "evidence": "RiskController.java:42"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "summary": {
+      "一致": 0,
+      "缺失": 1,
+      "不一致": 0,
+      "额外实现": 1,
+      "证据不足": 0,
+      "总计": 2
+    }
+  }
+}
