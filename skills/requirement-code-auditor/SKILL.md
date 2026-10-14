@@ -77,4 +77,4 @@ from scripts.comparator.compatibility import ReqCodeComparator
 from scripts.evidence_normalizer import build_code_evidence
 ```
 
-所有组件入口都委托同一包内引擎，不得读取默认产物目录或写入第二套正式事实与证据。公共入口与产物登记在 `../contracts/skill_contracts.json`。验证本包：`python -m unittest discover -s tests -t . -p "test_*.py"`；验证主工作流及旧引擎等价性：在项目根目录运行 `python -m unittest discover .codex/skills/testcase-generator/tests -p "test_*.py"`。
+所有组件入口都委托同一包内引擎，不得读取默认产物目录或写入第二套正式事实与证据。公共入口与产物登记在 `../contracts/skill_contracts.json`。验证本包：`python -m unittest discover -s tests -t . -p "test_*.py"`；验证主工作流及旧引擎等价性：进入本整包的 `testcase-generator` 目录运行 `python -m unittest discover -s tests -p "test_*.py"`；归档对照仅在有测试专用参照的本机执行。

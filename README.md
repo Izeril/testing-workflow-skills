@@ -2,131 +2,113 @@
 
 testing-workflow-skills 用于 Codex 的测试工作流，与已有 jwy-testi-expert（WorkBuddy/VS Code 五步流水线）独立并存。两者分别维护、安装和更新。
 
-本仓库的公开主入口是 `skills/testcase-generator/SKILL.md`，运行 CLI 是 `skills/testcase-generator/scripts/main.py`。四个技能与 `contracts` 必须来自同一 commit，保持同级目录。GitHub 仓库为 [Izeril/testing-workflow-skills](https://github.com/Izeril/testing-workflow-skills)，按私有仓库维护。
+对外整包名称是 **testing-workflow**。仓库链接：[Izeril/testing-workflow-skills](https://github.com/Izeril/testing-workflow-skills)。本次通用化候选版本为 `1.1.0-rc.1`；验证后发布 `v1.1.0`。旧 `v1.0.0` 没有整包入口，不能使用下方整包安装参数安装它。
 
-## 目录与维护范围
+## 把仓库链接发给助手安装
+
+可以直接对 Codex 说：
+
+> 请从 https://github.com/Izeril/testing-workflow-skills 安装 testing-workflow 完整包，使用已验证的 v1.1.0。读取仓库 README，使用现有 skill-installer，从 skills 路径整包安装，名称 testing-workflow。核对本机有效的用户技能目录、Python 依赖和实际发现结果；保留已有 jwy 与其他技能。目标已存在时按更新流程处理。使用我自己的需求目录，不复制维护者配置。
+
+仓库为私有，同事需有读取权限并使用自己的 GitHub 登录。不得分发维护者令牌。
+
+助手先定位本机已有的 skill-installer，使用其安装脚本：
 
 ```text
-skills/
-  testcase-generator/       主入口、编排、提示词、模板、回归
-  doc-to-md/                MHTML/HTML/OLE2 Word 转换
-  requirement-code-auditor/ 需求事实、代码分析、五分类审计
-  xmind-generator/          评审版及可导入 XMind
-  contracts/                中央入口、产物 schema、验证器
+python "<skill-installer目录>/scripts/install-skill-from-github.py" --repo Izeril/testing-workflow-skills --path skills --name testing-workflow --ref v1.1.0
 ```
 
-本机源码：`D:\PythonWorkSpace\com\testing-workflow-skills`。首版安装：`D:\用户故事\AI_Project\.codex\skills` 下的上述五个目录。备份、下载副本与安装记录：`D:\用户故事\AI_Project\.ai-internal\testing-workflow-skills`。不将整个业务工作区加入 Git。
+当前安装器默认把技能安装到 `CODEX_HOME/skills`，未设置时使用用户目录下 `.codex/skills`；其他宿主可能使用用户级 `.agents/skills`。按实际安装器与宿主核对，必要时增加 `--dest "<已确认有效的用户技能根目录>"`。参见 [官方技能发现说明](https://learn.chatgpt.com/docs/build-skills)。不能仅因目录复制成功就认定技能已启用。
 
-维护仅在本仓库进行。业务仓库的 Git 保护继续生效：审计器拒绝写命令；主流程只允许现有明确授权的定向 fetch。不能通过删除保护来满足技能仓库的提交需要。
+安装器在系统临时目录下载，并复制整个 `skills` 为 `testing-workflow`。首次目标不存在即可安装；不要求已有五组件、业务项目或上一版备份。目标已存在时安装器会停止，转到下方更新流程。
 
-用户级同名技能保留，不按名称清理。当前工作区已在会话技能清单中提供项目级 `.codex/skills` 路径；使用时明确指定该 `SKILL.md` 并核对 `cross_skill_adapter.SKILLS_ROOT`。其他 Codex 版本的发现位置应按 [官方技能文档](https://learn.chatgpt.com/docs/build-skills) 和实际会话清单核对，不能将复制成功当成已启用。
+不要分别安装内部四技能，也不要把安装目标设成业务需求目录；本包不需要创建任何维护者同名目录。
 
-## 依赖与配置
+## 安装后的结构
 
-Python 3.10+、Git；首次基线已用 Python 3.13.5 验证。使用已有兼容环境；缺少依赖时安装：
-
-```powershell
-python -m pip install -r requirements.txt
+```text
+testing-workflow/
+  SKILL.md                   对外入口
+  requirements.txt           本包依赖清单
+  testcase-generator/        核心主入口、脚本、提示词、模板、回归
+  doc-to-md/                 Word 转 Markdown
+  requirement-code-auditor/  代码分析与需求实现审计
+  xmind-generator/           XMind 生成及转换
+  contracts/                 中央入口和产物契约
 ```
 
-`PyYAML` 负责配置；`markdownify` 负责 HTML/MHTML 转换。`tree-sitter` + `tree-sitter-java` 为当前验证过的 Java 语法解析实现；`tree-sitter-languages` 是代码中的可选回退，不是新增必需依赖。OLE2 二进制 `.doc` 需要外部 LibreOffice/soffice；缺失时明确返回依赖错误。HTML/MHTML 转换不需要 LibreOffice。
+四组件与 contracts 均在本包内保持同级，脚本根据自身位置定位资源。它们不占用用户技能根目录中的通用同名组件，不从 jwy 目录读取运行代码。
 
-`testcase-generator` 配置顺序保持为通用 `config.yaml` → 本机 `config.local.yaml` → `TESTCASE_*` → CLI。`requirement-code-auditor` 保持原有本机覆盖、显式配置及 `AUDITOR_*` 优先级。未新增配置中心或 `TESTCASE_CONFIG_PATH`。
+仓库根 `requirements.txt` 引用 `skills/requirements.txt`；安装后的包根直接包含同一依赖清单。源码位置、安装位置与业务需求位置彼此独立。
 
-审计器通用配置不含实际内网地址。首次安装由管理员在 **安装目录** `requirement-code-auditor/config.local.yaml` 写入实际 `gitnexus.url`，或使用 `AUDITOR_GITNEXUS_URL`。Token 使用 `AUDITOR_GITNEXUS_TOKEN`，不提交、不写入产物。没有地址的远程调用返回 `gitnexus_url_missing`、退出码 2；显式本地 Git 和注入测试客户端继续可用。
+## 首次检查和开始使用
 
-两技能的 `config.local.yaml`、XMind 的 `rules_config.local.json`、真实业务基线清单、业务材料、知识库和运行产物均不跟踪。本仓库不运行 jwy 安装目录中的代码。归档 `code-analyzer` / `req-code-comparator` 仅用于本机测试对照，不属于生产依赖。
+1. 检查 Python 3.10+、Git 和本包组件完整性。已验证环境为 Python 3.13.5。
+2. 使用已有兼容环境；缺少依赖时执行：
 
-## 检查方式
-
-在本仓库根目录执行中央契约：
-
-```powershell
-python skills/contracts/validate_contracts.py
+```text
+python -m pip install -r "<包根目录>/requirements.txt"
+python "<包根目录>/contracts/validate_contracts.py"
 ```
 
-分别进入以下目录运行既有回归；每条命令后检查退出码，失败时停止发布或安装：
+`PyYAML` 读取配置，`markdownify` 转换 HTML/MHTML。`tree-sitter` 和 `tree-sitter-java` 用于 Java 语法解析；代码保留无解析器时的明确降级，`tree-sitter-languages` 是可选回退。仅 OLE2 二进制 Word `.doc` 转换需要外部 LibreOffice/soffice，未安装时说明缺少该条件依赖。
 
-```powershell
-Push-Location skills/testcase-generator
+3. 核对宿主发现 `testing-workflow`，并确认内部入口来自 `<包根目录>/testcase-generator`。技能通常在下一轮可用；未刷新时重启后再查。若现有项目级同名核心技能仍存在，明确使用 testing-workflow 的包内路径，不自行删除旧来源。
+4. 提供你自己的具体需求目录，例如：
+
+> 使用 testing-workflow 分析需求目录「<本机需求目录>」，先完成需求分析和评审。
+
+也可执行核心 CLI：
+
+```text
+python "<包根目录>/testcase-generator/scripts/main.py" "<本机需求目录>" --step all
+```
+
+保留现有评审确认、XMind 终稿和归档关口；`--step all` 完成分析与评审后停在确认关口。运行输出为该需求的 `测试分析/`，JSON/状态/门禁证据位于其 `.ai-internal/`，知识库沿用需求/项目的 `.skill` 规则。
+
+仅适用代码分析等功能时提供自己的仓库、开发分支或服务连接。纯文档流程不要求维护者源码、真实测试样本或本机配置。指定了代码目标但分析失败时仍按现有规则阻断，不能把失败伪装成不适用。
+
+## 可选本机配置
+
+本机覆盖文件均位于自己的安装包内，不随仓库分发：
+
+| 文件 | 用途 |
+| --- | --- |
+| testcase-generator/config.local.yaml | 自己的产品、负责人、业务仓库等可选值 |
+| requirement-code-auditor/config.local.yaml | 自己的审计器连接与可选配置 |
+| xmind-generator/rules_config.local.json | 自己的项目初始规则与 KYM 映射 |
+
+主入口保持 `config.yaml → config.local.yaml → TESTCASE_* → CLI` 的适用优先级。审计器保持其既有显式配置、`AUDITOR_*` 和 CLI 优先级，不另建配置中心。
+
+GitNexus 地址无内置真实服务值，需要远程审计时由使用者在本机 `gitnexus.url` 或 `AUDITOR_GITNEXUS_URL` 提供。Token 使用 `AUDITOR_GITNEXUS_TOKEN`，不提交、不写入业务产物。缺少地址的远程调用明确返回 `gitnexus_url_missing`、退出码 2；本地代码分析需提供自己的仓库与分支。无代码目标的文档流程保持可用。
+
+## 更新及恢复
+
+结束当前业务运行后操作。只处理用户技能根目录下的 **testing-workflow** 这一个完整包。
+
+1. 核对目标路径、当前版本和来源；对比当前包与上次安装的源码版本，先保存并归并未入库的代码修改。
+2. 使用同一个标准安装器，将指定新 commit/tag 安装到系统临时目录中的全新技能根目录（`--dest` 指向该临时目录）。在新包中跑契约及适用回归，失败时保留当前安装。
+3. 将当前完整 testing-workflow 备份到本用户的临时或缓存目录，记录旧版本、备份绝对路径和日期。已有备份不得直接覆盖；确认新备份完整后再处理旧备份。
+4. 在复制/移动前解析实际绝对路径，确认安装目标是技能根目录的直接子目录 testing-workflow；备份和临时新包处于预定临时/缓存根内。检查根及子项没有指向其他位置的 junction/symlink。
+5. 用完整新包替换已确认目标，再恢复上表三个本机覆盖文件（原先存在才复制）。若使用者有自备测试材料，同样先保存并单独恢复，禁止将它们入库。
+6. 核对分发文件、版本、入口、配置以及实际运行；记录结果。成功后保留一份上一版完整备份。
+
+标准安装器不会覆盖已存在的目录，因此必须先在临时目录获取和验证新包，再进行受限替换；不得通过清理整个技能根目录来安装。
+
+失败时，将当前失败包移到临时/缓存区域的全新位置，再把完整备份复制回原 testing-workflow 路径，保留备份不消耗。复验契约、实际入口和主流程，并记录恢复版本。
+
+更新和恢复均不改业务需求、评审结论、知识库及历史产物。安装下载、备份和简单 Markdown 安装记录不放在业务项目根，不为安装创建业务 `.ai-internal/testing-workflow-skills`。运行期的需求内部证据目录继续保留。
+
+## 维护者检查
+
+源码只在本 Git 仓库维护；提交和推送前核对独立 remote。业务审计 Git 保护保持原状。重要验证版本使用 tag，日常通过 commit 追溯，不要求 Release 或发布流水线。
+
+在仓库根执行 `python skills/contracts/validate_contracts.py`。分别进入四个组件目录执行既有回归，例如：
+
+```text
 python -X utf8 -m unittest discover -s tests -v
-Pop-Location
-Push-Location skills/doc-to-md
-python -X utf8 -m unittest discover -s tests -v
-Pop-Location
-Push-Location skills/requirement-code-auditor
-python -X utf8 -m unittest discover -s tests -v
-Pop-Location
-Push-Location skills/xmind-generator
-python -X utf8 -m unittest discover -s tests -v
-Pop-Location
 ```
 
-纯下载副本中，真实业务基线及归档对照缺失会明确显示 `skipped`，不计为通过；其余合成测试继续执行。真实样本在本机工作区单独验证，不上传正文。本机保留的四份基线清单可以放回安装目录相应 `tests/fixtures` 位置；这属于本机测试材料，并由 `.gitignore` 排除。
+整包安装后从包根对应组件目录运行同一命令。没有维护者真实业务清单和归档对照时，对应测试明确跳过，不能计为通过。通用安装验证不要求这些私有材料；维护者真实基线在原本机工作区另行验证。
 
-## 首次下载与安装
-
-1. 当前需求运行结束后操作。确认 GitHub 身份、私有仓库权限、安装根目录和五组件清单。
-2. 将当前五组件完整备份到上述本机记录目录的 `previous`，包含两个组件的本机配置与真实测试清单。备份已存在时先归档它，禁止覆盖唯一可用备份。
-3. 对比当前安装与上次记录的 commit 下载副本，先保存并归并未入库代码改动。不要只看版本号。
-4. 下载明确版本到全新目录；不要在运行中的安装目录执行 Git checkout。
-
-```powershell
-$download = 'D:\用户故事\AI_Project\.ai-internal\testing-workflow-skills\download-v1.0.0'
-git clone --no-checkout https://github.com/Izeril/testing-workflow-skills.git $download
-# 确认上一条成功，再继续。
-git -C $download checkout --detach v1.0.0
-git -C $download rev-parse HEAD
-git -C $download remote -v
-```
-
-5. 在完整下载目录运行上述契约和回归，确认五组件及资源齐全；检查失败时保留安装现状。
-6. 同步前验证五个实际绝对路径都是安装根目录的直接子目录，且没有符号链接/junction 指向别处。复制、移动或清理只处理五个指定组件，不替换整个 `.codex/skills`。
-7. 保留本机配置后，逐个替换指定组件。下面的手工片段假定 `previous` 已成功备份且下载检查全部通过；执行前填入已验证的版本下载目录。
-
-```powershell
-$ErrorActionPreference = 'Stop'
-$install = [IO.Path]::GetFullPath('D:\用户故事\AI_Project\.codex\skills')
-$download = [IO.Path]::GetFullPath('D:\用户故事\AI_Project\.ai-internal\testing-workflow-skills\download-v1.0.0')
-$previous = [IO.Path]::GetFullPath('D:\用户故事\AI_Project\.ai-internal\testing-workflow-skills\previous')
-$components = @('testcase-generator','doc-to-md','requirement-code-auditor','xmind-generator','contracts')
-# 先对所有源/备份/目标完成检查，再开始任何替换。
-foreach ($name in $components) {
-    $target = [IO.Path]::GetFullPath((Join-Path $install $name))
-    if ((Split-Path $target -Parent) -ne $install) { throw '目标越界' }
-    foreach ($path in @($target, (Join-Path "$download\skills" $name), (Join-Path $previous $name))) {
-        if (-not (Test-Path -LiteralPath $path -PathType Container)) { throw "缺少组件: $path" }
-        $items = @((Get-Item -LiteralPath $path)) + @(Get-ChildItem -LiteralPath $path -Force -Recurse)
-        if ($items | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }) { throw "存在重解析路径: $path" }
-    }
-}
-foreach ($name in $components) {
-    $target = [IO.Path]::GetFullPath((Join-Path $install $name))
-    if ((Split-Path $target -Parent) -ne $install) { throw '目标越界' }
-    Remove-Item -LiteralPath $target -Recurse -Force
-    Copy-Item -LiteralPath (Join-Path "$download\skills" $name) -Destination $install -Recurse
-    $localConfig = Join-Path (Join-Path $previous $name) 'config.local.yaml'
-    if (Test-Path -LiteralPath $localConfig) { Copy-Item -LiteralPath $localConfig -Destination $target }
-}
-# 真实基线清单按需从 previous 恢复到相应 tests/fixtures，不覆盖源码文件。
-```
-
-XMind 更新时同样从 `previous/xmind-generator/rules_config.local.json` 恢复本机规则。首版从旧规则与嵌入 KYM 映射提取为该文件，保留本机项目行为；通用 `rules_config.json` 只分发公共模板，不包含历史项目学习记录。
-
-8. 再跑安装目录的契约和既有回归，用分开的需求工作副本完成实际主流程。确认实际入口、四技能与 contracts 均来自安装根目录，输出没有落入另一体系目录。保留现有人工评审、终稿和归档门禁。
-9. 在 `installation.md` 写明仓库 URL、commit/tag、安装路径、日期、通过/跳过/未执行项目。本机新建的审计器配置须保留实际连接值。
-10. 若会话仍显示旧技能来源，开启新聊天或重启后再次核对会话技能清单；旧聊天的缓存不能证明刷新完成。
-
-## 更新与手工恢复
-
-日常维护：在本仓库修改 → 相关既有检查 → `git diff --check` → 检查待跟踪文件 → commit/push → 下载指定 commit/tag → 重复以上备份/检查/受限同步流程。重要且已验证版本使用独立 tag；首版为 `v1.0.0`。不强制 Release、PR 或发布流水线。
-
-更新前不得覆盖尚未入库的安装副本改动。成功更新后留一份上一版备份。同步或安装验证失败时立即停止并手工恢复：先确认 `previous` 五组件齐全、实际路径都在备份根目录内且不含 reparse point；将每个当前安装组件移到本机记录目录中的全新失败副本目录，再把 `previous` 对应组件复制回安装根目录，禁止清理整棵技能根目录。恢复后重新跑契约和主流程，并记录恢复版本；备份副本不被消耗。
-
-恢复范围仅为五组件和本机配置。历史需求文档、评审结论、知识库和已生成产物不会随技能回滚。恢复后首次修改仍在独立源码仓库进行。
-
-## 并存边界与验收
-
-jwy 采用自己的仓库、入口、安装方式、commit/tag 与输出工作副本。本机核对发现该源码与用户级 `jwy-testing-expert-skill` 入口存在；当前机器没有 WorkBuddy 专家插件安装目录，不能把静态文件校验当成 WorkBuddy UI 运行通过。用户级同名 `testcase-generator` 归属不明确，保持原状，当前 Codex 工作区使用明确的项目级路径。
-
-首版验收涵盖：完整下载目录的契约/既有回归；安装后的实际主流程与路径；配置保留和上一版恢复；受保护的 jwy 源码、用户级入口与其他技能文件指纹不变。每项真实运行结果以本机 `installation.md` 为准，不把缺少材料的跳过算成通过。
+发布前核对实际 Git 跟踪列表，排除本机覆盖、凭据、实际内网默认值、真实业务材料、运行产物和缓存。验证至少覆盖不同临时安装根和不同需求目录，其中含中文及空格，另做本机覆盖保留与完整恢复。安装采用已有 skill-installer，不新增自研下载器、同步系统或分发测试平台。

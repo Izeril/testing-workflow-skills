@@ -1,0 +1,6 @@
+# Python >= 3.10；已在 Python 3.13.5 验证
+PyYAML==6.0.1
+markdownify==1.2.2
+# Java 语法增强；代码保留无解析器时的明确降级行为
+tree-sitter==0.26.0
+tree-sitter-java==0.23.5
